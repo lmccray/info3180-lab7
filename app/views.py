@@ -12,6 +12,17 @@ from flask import render_template, request
 # Routing for your application.
 ###
 
+@app.route("/api/upload", methods=["POST"])
+def upload():
+    form = UploadForm()
+    if request.method == "POST":
+        if form.validate_on_submit() == True:
+            descrip = form.description.data
+            filename = assignPath(form.photo.data)
+            return jsonify(message="File uploaded successfully", filename=filename, description=descrip)
+        else:
+            return jsonify(errors=form_errors(form))
+
 
 # Please create all new routes and view functions above this route.
 # This route is now our catch all route for our VueJS single page
@@ -44,7 +55,14 @@ def form_errors(form):
 
     return error_messages
 
-
+#Saves the uploaded photo to a folder
+def assignPath(upload):
+    filename = secure_filename(upload.filename)
+    upload.save(os.path.join(
+                app.config['UPLOAD_FOLDER'], filename
+    ))
+    return filename
+    
 ###
 # The functions below should be applicable to all Flask apps.
 ###
