@@ -5,8 +5,11 @@ Werkzeug Documentation:  http://werkzeug.pocoo.org/documentation/
 This file creates your application.
 """
 
+import os
 from app import app
-from flask import render_template, request
+from flask import render_template, request, jsonify
+from werkzeug.utils import secure_filename
+from app.forms import UploadForm
 
 ###
 # Routing for your application.
@@ -62,7 +65,7 @@ def assignPath(upload):
                 app.config['UPLOAD_FOLDER'], filename
     ))
     return filename
-    
+
 ###
 # The functions below should be applicable to all Flask apps.
 ###
